@@ -1,0 +1,23 @@
+{
+  "release": "v1.0.1",
+  "date": "2026-10-28",
+  "source": "Current ICCIT submission LaTeX sources in the research working tree",
+  "synchronization": "Byte-for-byte copy; dataset citation to v1.0.0 is intentionally preserved.",
+  "files": {
+    "paper/main_iccit.tex": {
+      "v1.0.0_sha256": "db0f19eb7a38e624df834c41e3f4396b3b4a043da9a6bb9463f4283e2e61d3b4",
+      "submission_source_sha256": "53bd2b53cccc1c9d2e84ddd1d7f44edd0431cb050678e78e4e3e2ba7ce245b27",
+      "published_source_sha256": "53bd2b53cccc1c9d2e84ddd1d7f44edd0431cb050678e78e4e3e2ba7ce245b27"
+    },
+    "paper/main_iccit_long.tex": {
+      "v1.0.0_sha256": "0bdcc61b9ef49780ca348d120711dc2fa32a8e13446c76870507274c5f0d877e",
+      "submission_source_sha256": "ba97543f9325b2c2e5524d58c2704f89f507b44c5b678684af4e7c4ccf5c09ad",
+      "published_source_sha256": "ba97543f9325b2c2e5524d58c2704f89f507b44c5b678684af4e7c4ccf5c09ad"
+    },
+    "paper/main_iccit_vi.tex": {
+      "v1.0.0_sha256": "a5f06ffbb9d53888fd511723e5f5867627c555746dc73b14c9785c830e74d996",
+      "submission_source_sha256": "bea9cc2e30af44b64f7bfa56bb9116f779ce7f054982f6d8f99733621bf03170",
+      "published_source_sha256": "bea9cc2e30af44b64f7bfa56bb9116f779ce7f054982f6d8f99733621bf03170"
+    }
+  }
+}

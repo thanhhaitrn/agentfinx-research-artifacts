@@ -1,16 +1,18 @@
 {
-  "version": "v1.0.0",
+  "version": "v1.0.1",
   "date": "2026-10-28",
   "upstream_repository": "https://github.com/thanhhaitrn/financial-statement-agentic-system",
   "upstream_commit": "5c6b578",
   "upstream_branch": "generalization-20261026",
-  "release_url": "https://github.com/thanhhaitrn/agentfinx-research-artifacts/releases/tag/v1.0.0",
+  "release_url": "https://github.com/thanhhaitrn/agentfinx-research-artifacts/releases/tag/v1.0.1",
   "scope": "Fresh source snapshot plus reviewed research artifacts; no upstream Git history. Manuscript sources include the local ICCIT versions.",
   "changes_for_distribution": [
     "Public archive links in manuscript sources",
     "Portable default path in analysis_extra.py",
     "Audit scripts check locked source hashes without requiring private historical Git objects",
-    "Number checker excludes archive URLs and the release identifier from empirical-result checks"
+    "Number checker excludes archive URLs and the release identifier from empirical-result checks",
+    "v1.0.1 synchronizes the three ICCIT LaTeX manuscripts byte-for-byte with the submission sources; preserves their citation to the unchanged v1.0.0 data.",
+    "MIT license for original project software and software documentation; manuscript, research data and third-party rights are excluded as stated in LICENSE_SCOPE.md."
   ],
   "private_exclusions": [
     "Original rater workbooks",
@@ -18,5 +20,11 @@
     "Private assignment maps",
     "Environment files, credentials, databases, application runtime storage",
     "Worker diagnostic logs and key-rotation logs"
-  ]
+  ],
+  "previous_release": "v1.0.0",
+  "data_version": "v1.0.0",
+  "data_archive_sha256": "44109c56ad32e3fbda4c8e890d7b1a07201b89ac976b8db966db44e1f49f63f4",
+  "source_sync_manifest": "paper/SOURCE_SYNC.json",
+  "code_license": "MIT",
+  "license_scope": "LICENSE_SCOPE.md"
 }

@@ -1,5 +1,7 @@
 # Rebuild the public manuscript results
 
+The three ICCIT manuscript sources were synchronized with the submission sources in v1.0.1; their v1.0.0 data citation is intentionally retained. `SOURCE_SYNC.json` records exact source hashes.
+
 First download and extract the versioned artifact archive as described in the repository README. Python 3.12 was used for release verification.
 
 From the repository root:
@@ -18,7 +20,7 @@ python paper/make_appendix_tables.py paper
 python paper/make_tables_vi.py paper
 ```
 
-`paper_assets` checks the frozen-label, locked-table, human-validation-report and normalized-label hashes, recomputes targeted sensitivity scenarios, and generates the main tables and 1,409 number macros. It does not call models. Generated main table and number hashes must match `paper/generated/manifest.json` in tag `v1.0.0`.
+`paper_assets` checks the frozen-label, locked-table, human-validation-report and normalized-label hashes, recomputes targeted sensitivity scenarios, and generates the main tables and 1,409 number macros. It does not call models. Generated main table and number hashes must match `paper/generated/manifest.json` in tag `v1.0.1`.
 
 The original lock and labels are immutable. `lock verify`, `human_check_scorer validate`, and the original human-report collection commands require private adjudication inputs or original workbooks; they are not public reproduction entry points. The public pipeline uses the archived report and anonymized validated labels. The identifier-to-name mapping and returned workbooks remain private.
 

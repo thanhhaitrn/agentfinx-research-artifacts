@@ -2,17 +2,24 @@
 
 Public research snapshot for **Where Does a Financial-Report Agent's Robustness to News-Borne Attacks Come From?**
 
-**Version:** [v1.0.0](https://github.com/thanhhaitrn/agentfinx-research-artifacts/releases/tag/v1.0.0), 28 October 2026.
+**Version:** [v1.0.1](https://github.com/thanhhaitrn/agentfinx-research-artifacts/releases/tag/v1.0.1), 28 October 2026.
 
 This repository contains analysis and application source, benchmark cases and protocols, manuscript sources, and generated tables. The release contains frozen labels, anonymized human-validation outputs, model answers, evidence snapshots, and prompt logs. Reported tables can be rebuilt offline without model calls, API keys, database access, or original rater workbooks.
+
+## Changes in v1.0.1
+
+The three ICCIT LaTeX manuscripts now match the submission sources byte-for-byte, including URL wrapping, the artifact-availability text, and the explanation of development-repository dates. See [paper/SOURCE_SYNC.json](paper/SOURCE_SYNC.json) for source hashes. Their citation to v1.0.0 is preserved because the frozen data, analysis code, and generated results are unchanged.
+
+The data archive retains its name and bytes from v1.0.0 and is attached again to this release. The release also includes `agentfinx-manuscript-source-v1.0.1.zip`, containing the manuscript sources, figures, generated tables, and build instructions.
 
 ## Download and verify
 
 ```sh
-git clone --branch v1.0.0 https://github.com/thanhhaitrn/agentfinx-research-artifacts.git
+git clone --branch v1.0.1 https://github.com/thanhhaitrn/agentfinx-research-artifacts.git
 cd agentfinx-research-artifacts
-curl -fL -O https://github.com/thanhhaitrn/agentfinx-research-artifacts/releases/download/v1.0.0/agentfinx-artifacts-v1.0.0.tar.gz
-curl -fL -O https://github.com/thanhhaitrn/agentfinx-research-artifacts/releases/download/v1.0.0/SHA256SUMS
+curl -fL -O https://github.com/thanhhaitrn/agentfinx-research-artifacts/releases/download/v1.0.1/agentfinx-artifacts-v1.0.0.tar.gz
+curl -fL -O https://github.com/thanhhaitrn/agentfinx-research-artifacts/releases/download/v1.0.1/SHA256SUMS
+curl -fL -O https://github.com/thanhhaitrn/agentfinx-research-artifacts/releases/download/v1.0.1/agentfinx-manuscript-source-v1.0.1.zip
 shasum -a 256 -c SHA256SUMS
 tar -xzf agentfinx-artifacts-v1.0.0.tar.gz
 python3 scripts/verify_public_artifact.py
@@ -42,4 +49,8 @@ The v1 frozen labels define the main results. Human substitution and targeted AI
 
 The repository starts with fresh Git history. It derives from upstream branch `generalization-20261026`, commit `5c6b578`, plus local ICCIT manuscript sources. Audit scripts validate the original locked source hashes without requiring upstream historical Git objects. Original `LOCK.json`, labels, reports and data hashes are retained. Historical commit references and absolute paths in recorded logs are provenance, not setup instructions.
 
-Manuscripts are research drafts, not a claim of conference acceptance. This release includes LaTeX sources and authored figures; stale compiled Word/PDF drafts are not distributed. No new software or data license is asserted by this publication; applicable third-party rights remain with their owners.
+Manuscripts are research drafts, not a claim of conference acceptance. This release includes LaTeX sources and authored figures; stale compiled Word/PDF drafts are not distributed.
+
+## License
+
+Original project software code and its software documentation are available under the [MIT License](LICENSE). Manuscripts, research figures, datasets, generated research records, and third-party material are outside this software-license grant. See [LICENSE_SCOPE.md](LICENSE_SCOPE.md) for the precise scope.

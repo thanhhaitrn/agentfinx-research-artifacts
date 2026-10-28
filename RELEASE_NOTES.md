@@ -1,9 +1,10 @@
-Public source and data snapshot for the AgentFinX news-borne attack study.
+Synchronizes the ICCIT manuscript sources with the submission version.
 
-- 9,017 research data files: frozen labels, run results, evidence snapshots, prompt logs, case/protocol snapshots, and anonymized human-validation outputs.
-- Download `agentfinx-artifacts-v1.0.0.tar.gz` and `SHA256SUMS`; extract the archive into a checkout of tag `v1.0.0`.
-- Run `python3 scripts/verify_public_artifact.py`, then follow `paper/BUILD.md` to reproduce tables offline without model calls.
-- All six primary generated LaTeX files (including 1,409 number macros), supplementary tables and Vietnamese tables reproduced byte-for-byte. The frozen label SHA-256 remains `bf1a72baf2bb2bc93cc62a1fd1ade96973c6fced8be95eaf42bd385f811a273e`.
-- 15 targeted tests passed. Archive contents were independently checked against the per-file SHA-256 manifest.
+- `paper/main_iccit.tex`, `paper/main_iccit_long.tex`, and `paper/main_iccit_vi.tex` now match the submission sources byte-for-byte. `paper/SOURCE_SYNC.json` records their SHA-256 hashes.
+- Updates include URL wrapping, artifact-availability wording, and clarification that protocol commit dates refer to the development repository.
+- Preserves the submission's citation to data release v1.0.0 and commit `c3a45f0`. Analysis code, frozen labels, generated tables, and all 9,017 data files are unchanged.
+- Adds `agentfinx-manuscript-source-v1.0.1.zip` with the LaTeX sources, generated tables, figures, and build documentation. The unchanged data archive `agentfinx-artifacts-v1.0.0.tar.gz` is attached again for convenience. `SHA256SUMS` covers both archives.
+- Adds the MIT `LICENSE` for original project software and software documentation. `LICENSE_SCOPE.md` excludes manuscripts, research data, and third-party material from the software-license grant.
+- Source/dependency/macro checks and the full data-manifest verification passed. This release does not rerun models or publish new experimental results.
 
-Original rater workbooks and identity mappings, credentials, databases, and application runtime storage are excluded. The public source snapshot has fresh Git history. Manuscripts are LaTeX source drafts; compiled Word/PDF manuscripts are not included. See `PUBLICATION.json` and the README for provenance, exclusions and reproduction limits.
+The v1.0.0 tag and release remain unchanged. Compiled manuscript PDF/Word files and private rater records are not included.
