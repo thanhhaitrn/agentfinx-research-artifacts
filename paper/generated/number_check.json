@@ -1,0 +1,142 @@
+{
+  "status": "ok",
+  "defined_macros": 1409,
+  "used_macros": 91,
+  "missing_macros": [],
+  "errors": [],
+  "literal_design_values": [
+    {
+      "body_line": 14,
+      "token": "80"
+    },
+    {
+      "body_line": 14,
+      "token": "40"
+    },
+    {
+      "body_line": 14,
+      "token": "40"
+    },
+    {
+      "body_line": 16,
+      "token": "80"
+    },
+    {
+      "body_line": 17,
+      "token": "95"
+    },
+    {
+      "body_line": 49,
+      "token": "80"
+    },
+    {
+      "body_line": 73,
+      "token": "10"
+    },
+    {
+      "body_line": 97,
+      "token": "100"
+    },
+    {
+      "body_line": 97,
+      "token": "20"
+    },
+    {
+      "body_line": 97,
+      "token": "80"
+    },
+    {
+      "body_line": 99,
+      "token": "16"
+    },
+    {
+      "body_line": 102,
+      "token": "40"
+    },
+    {
+      "body_line": 104,
+      "token": "40"
+    },
+    {
+      "body_line": 104,
+      "token": "72"
+    },
+    {
+      "body_line": 104,
+      "token": "8"
+    },
+    {
+      "body_line": 107,
+      "token": "0"
+    },
+    {
+      "body_line": 108,
+      "token": "640"
+    },
+    {
+      "body_line": 115,
+      "token": "80"
+    },
+    {
+      "body_line": 116,
+      "token": "16"
+    },
+    {
+      "body_line": 132,
+      "token": "110"
+    },
+    {
+      "body_line": 158,
+      "token": "95"
+    },
+    {
+      "body_line": 158,
+      "token": "95"
+    },
+    {
+      "body_line": 168,
+      "token": "80"
+    },
+    {
+      "body_line": 183,
+      "token": "95"
+    },
+    {
+      "body_line": 192,
+      "token": "80"
+    },
+    {
+      "body_line": 199,
+      "token": "80"
+    },
+    {
+      "body_line": 206,
+      "token": "16"
+    },
+    {
+      "body_line": 236,
+      "token": "80"
+    },
+    {
+      "body_line": 236,
+      "token": "80"
+    },
+    {
+      "body_line": 237,
+      "token": "80"
+    },
+    {
+      "body_line": 237,
+      "token": "80"
+    },
+    {
+      "body_line": 238,
+      "token": "80"
+    },
+    {
+      "body_line": 289,
+      "token": "80"
+    }
+  ],
+  "scope": "Static numbers and generated-source checks; does not certify PDF layout or external factual claims."
+}

@@ -1,0 +1,10 @@
+{
+ "kind": "interpretation_annex_approval",
+ "annex": "INTERPRETATION_ANNEX_v2.md",
+ "annex_sha256": "fdc0bb64e55af9cbd58743a446db7a6270f5faca4855bea4f921858928884793",
+ "rubric_sha256": "df7c3bbe14ce9998aa43c49ebbce84669dab2cf6145f7a94852f14b8a07a2250",
+ "protocol_sha256": "105a51cde396ac00a06ca93c683ac2eded3b75c0a7312819567a034ca115c534",
+ "approved_by": "thanhhaitrn (người phụ trách)",
+ "approved_at": "2026-10-26T15:21:55+00:00",
+ "posthoc": true
+}

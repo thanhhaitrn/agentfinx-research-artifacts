@@ -1,0 +1,18 @@
+\begin{table*}[t]\centering\small
+\caption{Main run (gpt-oss:120b, 80 test cases: 40 injection I, 40 poisoning P). Attack success counts pairs; ``(+$k$)'' are pairs left undetermined, kept in the denominator and reported as a range ($\dagger$). Rates are \% with Wilson 95\% intervals. Utility columns: \% of clean answers with the correct target value, \% of clean answers refused, and \% of the 72 numeric-target attacks answered correctly without adopting the fake value.}
+\label{tab:main}
+\begin{tabular}{lrlrrrrr}\toprule
+Config & Succ.\ (80) & ASR \% [95\% CI] & I (40) & P (40) & Clean correct & Clean refused & Attack correct, no fake \\\midrule
+A & 38 (+4) & 47.5--52.5$^\dagger$ & 18 (+4) & 20 & 51.2 & 26.2 & 37.5 \\
+B & 1 & 1.2 [0.2, 6.7] & 0 & 1 & 96.2 & 1.2 & 91.7 \\
+C & 0 & 0.0 [0.0, 4.6] & 0 & 0 & 95.0 & 1.2 & 94.4 \\
+D & 0 & 0.0 [0.0, 4.6] & 0 & 0 & 97.5 & 0.0 & 91.7 \\
+\bottomrule\end{tabular}\\[4pt]
+\begin{tabular}{lrrrr}\toprule
+& \multicolumn{2}{c}{Injection (I)} & \multicolumn{2}{c}{Poisoning (P)} \\
+Comparison & only first/only second & $p_{\text{Holm}}$ & only first/only second & $p_{\text{Holm}}$ \\\midrule
+A--D & 18/0 & \ensuremath{3.8{\times}10^{-5}} & 20/0 & \ensuremath{1.1{\times}10^{-5}} \\
+B--C & 0/0 & 1 & 1/0 & 1 \\
+C--D & 0/0 & 1 & 0/0 & 1 \\
+\bottomrule\end{tabular}
+\end{table*}

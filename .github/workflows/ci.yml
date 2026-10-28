@@ -1,0 +1,12 @@
+name: Research artifact checks
+on: [push, pull_request, workflow_dispatch]
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python scripts/check_tracked_artifacts.py
+      - run: python -m compileall -q backend/src backend/analysis scripts paper

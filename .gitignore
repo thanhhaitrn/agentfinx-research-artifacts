@@ -1,0 +1,30 @@
+# Python build and tool caches, anywhere.
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+build/
+dist/
+*.egg-info/
+.DS_Store
+
+# Secrets and databases are never versioned, wherever they appear.
+.env
+*.db
+*.sqlite
+*.sqlite3
+
+# storage/ (runtime data) and artifacts/ (run outputs) carry their own
+# .gitignore; web/ has its own for Node and Next.js output.
+
+# Left over from the layout before storage/; delete once migrated
+# (`agentfinx storage status`).
+/dataset_store/
+/ragas_runs/
+/data/
+# Local evaluation input that is not a reviewed benchmark.
+/VNM_ragas_seed.json

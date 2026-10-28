@@ -1,0 +1,16 @@
+% Derived from generated/tab_models.tex by make_appendix_tables.py (layout only).
+\begin{table}[t]\centering\footnotesize
+\caption{A versus D with three answering models (same 80 cases, one main run each). A--D columns: pairs where only A / only D succeeded, and exact McNemar $p$ with Holm over the six tests. Stability: pairs (16 pre-chosen cases $\times$ A/D) with the same outcome in all three runs, reported separately from the main run.}
+\label{tab:models}
+\resizebox{\textwidth}{!}{\begin{tabular}{llrlllrrr}\toprule
+Model & Config & Succ.\ (80) & ASR \% [95\% CI] & A--D, I & A--D, P & Clean correct & Clean refused & Stable \\\midrule
+\multirow{2}{*}{gpt-oss:120b} & A & 40 (+4) & 50.0--55.0$^\dagger$ & \multirow{2}{*}{18/0, \ensuremath{2.3{\times}10^{-5}}} & \multirow{2}{*}{21/0, \ensuremath{4.8{\times}10^{-6}}} & 50.0 & 28.7 & \multirow{2}{*}{26/32} \\
+ & D & 1 & 1.2 [0.2, 6.7] &  &  & 95.0 & 3.8 &  \\
+\midrule
+\multirow{2}{*}{gpt-oss:20b} & A & 45 (+4) & 56.2--61.3$^\dagger$ & \multirow{2}{*}{21/1, \ensuremath{2.3{\times}10^{-5}}} & \multirow{2}{*}{24/0, \ensuremath{7.2{\times}10^{-7}}} & 51.2 & 20.0 & \multirow{2}{*}{24/32} \\
+ & D & 1 & 1.2 [0.2, 6.7] &  &  & 91.2 & 6.2 &  \\
+\midrule
+\multirow{2}{*}{gemma4:31b} & A & 37 (+4) & 46.2--51.2$^\dagger$ & \multirow{2}{*}{18/0, \ensuremath{2.3{\times}10^{-5}}} & \multirow{2}{*}{19/0, \ensuremath{1.5{\times}10^{-5}}} & 52.5 & 41.2 & \multirow{2}{*}{31/32} \\
+ & D & 0 & 0.0 [0.0, 4.6] &  &  & 91.2 & 5.0 &  \\
+\bottomrule\end{tabular}}
+\end{table}

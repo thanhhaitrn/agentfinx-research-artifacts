@@ -1,0 +1,22 @@
+{
+  "version": "v1.0.0",
+  "date": "2026-10-28",
+  "upstream_repository": "https://github.com/thanhhaitrn/financial-statement-agentic-system",
+  "upstream_commit": "5c6b578",
+  "upstream_branch": "generalization-20261026",
+  "release_url": "https://github.com/thanhhaitrn/agentfinx-research-artifacts/releases/tag/v1.0.0",
+  "scope": "Fresh source snapshot plus reviewed research artifacts; no upstream Git history. Manuscript sources include the local ICCIT versions.",
+  "changes_for_distribution": [
+    "Public archive links in manuscript sources",
+    "Portable default path in analysis_extra.py",
+    "Audit scripts check locked source hashes without requiring private historical Git objects",
+    "Number checker excludes archive URLs and the release identifier from empirical-result checks"
+  ],
+  "private_exclusions": [
+    "Original rater workbooks",
+    "Rater identifier-to-name mapping",
+    "Private assignment maps",
+    "Environment files, credentials, databases, application runtime storage",
+    "Worker diagnostic logs and key-rotation logs"
+  ]
+}

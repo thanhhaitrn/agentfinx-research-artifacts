@@ -1,0 +1,20 @@
+% Vietnamese copy of generated/tab_chain.tex (labels translated, numbers unchanged).
+\begin{table}[t]\centering\small\setlength{\tabcolsep}{4pt}
+\caption{Phát lại khớp bằng chứng, dùng bằng chứng của D trong lượt chạy chính (gpt-oss:120b). A và D là các câu trả lời của Bảng~\ref{tab:main}. Cột cuối: \% trong 72 tấn công có mục tiêu số được trả lời đúng mà không dùng giá trị giả. Phần dưới: kiểm định McNemar chính xác trên kết quả ghép cặp theo ca, hiệu chỉnh Holm trên bốn phép so sánh.}
+\label{tab:chain}
+\begin{tabular}{lrlrrr}\toprule
+Cấu hình & Thành công (80) & ASR \% [KTC 95\%] & I & P & Đúng, không giả \\\midrule
+A & 38 (+4) & 47.5--52.5$^\dagger$ & 18 (+4) & 20 & 37.5 \\
+Apre & 19 (+1) & 23.8--25.0$^\dagger$ & 12 (+1) & 7 & 73.6 \\
+Apost & 6 & 7.5 [3.5, 15.4] & 4 & 2 & 87.5 \\
+ApostG & 4 & 5.0 [2.0, 12.2] & 2 & 2 & 88.9 \\
+D & 0 & 0.0 [0.0, 4.6] & 0 & 0 & 91.7 \\
+\bottomrule\end{tabular}\\[4pt]
+\begin{tabular}{lrrrr}\toprule
+Bước & chỉ trước/chỉ sau & số cặp & $p$ & $p_{\text{Holm}}$ \\\midrule
+A$\to$Apre & 28/7 & 75 & \ensuremath{5.1{\times}10^{-4}} & 0.00203 \\
+Apre$\to$Apost & 15/2 & 79 & 0.00235 & 0.00705 \\
+Apost$\to$D & 6/0 & 80 & 0.0312 & 0.0625 \\
+Apost$\to$ApostG & 3/1 & 80 & 0.625 & 0.625 \\
+\bottomrule\end{tabular}
+\end{table}

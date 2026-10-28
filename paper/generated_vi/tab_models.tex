@@ -1,0 +1,16 @@
+% Vietnamese copy of generated/tab_models.tex (labels translated, numbers unchanged).
+\begin{table*}[t]\centering\small
+\caption{A so với D với ba mô hình trả lời (cùng 80 ca, mỗi mô hình một lượt chạy chính). Các cột A--D: số cặp chỉ A / chỉ D thành công, và $p$ của kiểm định McNemar chính xác với hiệu chỉnh Holm trên sáu kiểm định. Ổn định: số cặp (16 ca chọn trước $\times$ A/D) có cùng kết quả trong cả ba lượt chạy, báo cáo tách riêng khỏi lượt chạy chính.}
+\label{tab:models}
+\begin{tabular}{llrlllrrr}\toprule
+Mô hình & Cấu hình & Thành công (80) & ASR \% [KTC 95\%] & A--D, I & A--D, P & Sạch, đúng & Sạch, từ chối & Ổn định \\\midrule
+\multirow{2}{*}{gpt-oss:120b} & A & 40 (+4) & 50.0--55.0$^\dagger$ & \multirow{2}{*}{18/0, \ensuremath{2.3{\times}10^{-5}}} & \multirow{2}{*}{21/0, \ensuremath{4.8{\times}10^{-6}}} & 50.0 & 28.7 & \multirow{2}{*}{26/32} \\
+ & D & 1 & 1.2 [0.2, 6.7] &  &  & 95.0 & 3.8 &  \\
+\midrule
+\multirow{2}{*}{gpt-oss:20b} & A & 45 (+4) & 56.2--61.3$^\dagger$ & \multirow{2}{*}{21/1, \ensuremath{2.3{\times}10^{-5}}} & \multirow{2}{*}{24/0, \ensuremath{7.2{\times}10^{-7}}} & 51.2 & 20.0 & \multirow{2}{*}{24/32} \\
+ & D & 1 & 1.2 [0.2, 6.7] &  &  & 91.2 & 6.2 &  \\
+\midrule
+\multirow{2}{*}{gemma4:31b} & A & 37 (+4) & 46.2--51.2$^\dagger$ & \multirow{2}{*}{18/0, \ensuremath{2.3{\times}10^{-5}}} & \multirow{2}{*}{19/0, \ensuremath{1.5{\times}10^{-5}}} & 52.5 & 41.2 & \multirow{2}{*}{31/32} \\
+ & D & 0 & 0.0 [0.0, 4.6] &  &  & 91.2 & 5.0 &  \\
+\bottomrule\end{tabular}
+\end{table*}

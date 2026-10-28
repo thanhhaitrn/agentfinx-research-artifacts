@@ -1,0 +1,15 @@
+% Vietnamese copy of generated/tab_sens.tex (labels translated, numbers unchanged).
+\begin{table*}[t]\centering\small\setlength{\tabcolsep}{3.5pt}
+\caption{Độ nhạy của số lần tấn công thành công (trên 80). Các dòng rà soát AI là các lần rà soát hậu kiểm, không mù, trên một số câu trả lời được chọn; các dòng biên lật các ca còn tranh cãi. Dòng cuối thay bằng nhãn kiểm định của người, chỉ cho các tấn công có nhãn do bộ chấm quyết định; người chấm không biết mô hình/cấu hình, với các hạn chế nêu ở Mục~\ref{sec:labelling}. Mọi kịch bản đều chạy trên bản sao; bộ nhãn chính đã khoá không thay đổi.}
+\label{tab:sens}
+\begin{tabular}{lrrrrrrrrrrrr}\toprule
+& \multicolumn{3}{c}{Lượt chính} & \multicolumn{3}{c}{Chuỗi phát lại} & \multicolumn{2}{c}{gpt-oss:20b} & 120b & \multicolumn{3}{c}{$p_{\text{Holm}}$} \\
+Kịch bản & A & C & D & Apre & Apost & ApostG & A & D & D & Apre$\to$Apost & Apost$\to$D & A--D, 3 mô hình \\\midrule
+Nhãn đã khoá (chính) & 38 (+4) & 0 & 0 & 19 (+1) & 6 & 4 & 45 (+4) & 1 & 1 & 0.00705 & 0.0625 & \ensuremath{2.3{\times}10^{-5}} \\
+Rà soát AI, một chiều & 38 (+4) & 0 & 0 & 18 (+1) & 4 & 3 & 44 (+4) & 0 & 1 & 0.00156 & 0.25 & \ensuremath{1.5{\times}10^{-5}} \\
+Rà soát AI, hai chiều & 39 (+4) & 0 & 0 & 18 (+1) & 4 & 3 & 46 (+4) & 0 & 1 & 0.00156 & 0.25 & \ensuremath{1.5{\times}10^{-5}} \\
+Biên: ít chấp nhận hơn & 39 (+4) & 0 & 0 & 18 (+1) & 3 & 3 & 45 (+4) & 0 & 1 & \ensuremath{8.2{\times}10^{-4}} & 0.5 & \ensuremath{1.5{\times}10^{-5}} \\
+Biên: nhiều chấp nhận hơn & 40 (+4) & 1 & 0 & 18 (+1) & 4 & 3 & 46 (+4) & 0 & 1 & 0.00156 & 0.25 & \ensuremath{1.5{\times}10^{-5}} \\
+\shortstack[l]{Nhãn người, mù\\(\val{hv.answers} tấn công chỉ do bộ chấm)} & 40 (+4) & 0 & 2 & 16 (+1) & 3 & 3 & 42 (+4) & 1 & 1 & 0.00293 & 1 & \ensuremath{1.5{\times}10^{-5}} \\
+\bottomrule\end{tabular}
+\end{table*}

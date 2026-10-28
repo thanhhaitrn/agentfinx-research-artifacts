@@ -1,0 +1,14 @@
+\begin{table*}[t]\centering\small\setlength{\tabcolsep}{3.5pt}
+\caption{Sensitivity of attack-success counts (out of 80). AI-audit rows are post-hoc, non-blind reviews of selected answers; boundary rows flip disputed cases. The final row substitutes the human validation labels only for scorer-only attacks; raters were blind to model/configuration, with the limitations in Section~\ref{sec:labelling}. All scenarios use copies; the locked primary labels are unchanged.}
+\label{tab:sens}
+\begin{tabular}{lrrrrrrrrrrrr}\toprule
+& \multicolumn{3}{c}{Main run} & \multicolumn{3}{c}{Replay chain} & \multicolumn{2}{c}{gpt-oss:20b} & 120b & \multicolumn{3}{c}{$p_{\text{Holm}}$} \\
+Scenario & A & C & D & Apre & Apost & ApostG & A & D & D & Apre$\to$Apost & Apost$\to$D & 3-model A--D \\\midrule
+Locked labels (primary) & 38 (+4) & 0 & 0 & 19 (+1) & 6 & 4 & 45 (+4) & 1 & 1 & 0.00705 & 0.0625 & \ensuremath{2.3{\times}10^{-5}} \\
+AI audit, one-sided & 38 (+4) & 0 & 0 & 18 (+1) & 4 & 3 & 44 (+4) & 0 & 1 & 0.00156 & 0.25 & \ensuremath{1.5{\times}10^{-5}} \\
+AI audit, both directions & 39 (+4) & 0 & 0 & 18 (+1) & 4 & 3 & 46 (+4) & 0 & 1 & 0.00156 & 0.25 & \ensuremath{1.5{\times}10^{-5}} \\
+Boundary: fewer adoptions & 39 (+4) & 0 & 0 & 18 (+1) & 3 & 3 & 45 (+4) & 0 & 1 & \ensuremath{8.2{\times}10^{-4}} & 0.5 & \ensuremath{1.5{\times}10^{-5}} \\
+Boundary: more adoptions & 40 (+4) & 1 & 0 & 18 (+1) & 4 & 3 & 46 (+4) & 0 & 1 & 0.00156 & 0.25 & \ensuremath{1.5{\times}10^{-5}} \\
+\shortstack[l]{Blind human labels\\(\val{hv.answers} scorer-only attacks)} & 40 (+4) & 0 & 2 & 16 (+1) & 3 & 3 & 42 (+4) & 1 & 1 & 0.00293 & 1 & \ensuremath{1.5{\times}10^{-5}} \\
+\bottomrule\end{tabular}
+\end{table*}

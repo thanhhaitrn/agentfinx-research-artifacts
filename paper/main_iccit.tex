@@ -1,0 +1,409 @@
+% ICCIT submission version of the AgentFinX security paper.
+% Format follows the ICCIT "Instruction for using Word Article Template":
+% 10-pt Times, margins of at least 1 inch, numbered pages, title of 6-12 words,
+% running head <= 50 characters, abstract <= 150 words, 3-5 alphabetized keywords,
+% numeric citations in square brackets, references in order of citation listing all authors.
+\documentclass[10pt,letterpaper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{mathptmx}
+\usepackage[margin=1in,headsep=0.25in,footskip=0.35in]{geometry}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{url}
+\usepackage[nocompress]{cite}
+\renewcommand{\citepunct}{,}
+\usepackage[font=small,labelfont=bf,labelsep=period]{caption}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage[hidelinks]{hyperref}
+% hyperref here defines its own \numdef; set it aside while loading the generated numbers.
+\let\hyNumdef\numdef\let\numdef\undefined
+\input{generated/numbers.tex}
+\let\numdef\hyNumdef
+
+% Section headings
+\titleformat{\section}{\normalsize\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries\itshape}{\thesubsection}{0.5em}{}
+\titlespacing*{\section}{0pt}{10pt}{4pt}
+\titlespacing*{\subsection}{0pt}{8pt}{3pt}
+\setlength{\parindent}{1.5em}
+\setlength{\parskip}{0pt}
+\setlength{\emergencystretch}{1em}
+
+% Running head and page numbers
+\newcommand{\runninghead}{Robustness of a Financial Agent to News Attacks}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[R]{\small\itshape\runninghead}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\fancypagestyle{firstpage}{\fancyhf{}\fancyfoot[C]{\small\thepage}}
+
+\begin{document}
+\thispagestyle{firstpage}
+
+\begin{center}
+{\large\bfseries Where Does a Financial-Report Agent's Robustness to News-Borne Attacks Come From?\par}
+\vspace{10pt}
+{[Author 1 full name]$^{1,*}$, [Author 2 full name]$^{1}$, [Author 3 full name]$^{2}$\par}
+\vspace{6pt}
+{\small
+$^{1}$[Department, University, full postal address, Country]\\
+$^{2}$[Department, University, full postal address, Country]\\
+$^{*}$Corresponding author: [full name], [e-mail address]\par}
+\vspace{6pt}
+{\small\textit{Running head:} \runninghead\par}
+\end{center}
+
+\vspace{4pt}
+\noindent\textbf{Abstract.}
+Assistants that answer questions about financial statements increasingly read company news as well, which lets
+third parties place instructions or false figures in front of the model. We evaluate AgentFinX, a multi-agent
+assistant for Vietnamese financial statements, on 80 pre-registered attack cases (40 prompt injection, 40 data
+poisoning) delivered through synthetic news articles, each paired with a clean version. A plain retrieval baseline
+adopted the attacker's target in \val{p2.A.total.s} of 80 cases, plus \val{p2.A.total.u} undetermined; the full
+pipeline adopted it in none, or in \val{hv.main.D.s} after human relabelling. Removing the prompt guards and the
+provenance gate produced no detectable difference. An evidence-matched replay, which gives the baseline's single
+model call the pipeline's own evidence step by step, places most of the reduction in evidence preparation: the exact
+report facts retrieved and a structured, quote-checked news summary. The gap held with two further answering models.
+
+\vspace{6pt}
+\noindent\textbf{Keywords:} Data poisoning; Financial question answering; Large language model agents; Prompt
+injection; Retrieval-augmented generation
+
+\section{Introduction}
+Assistants that answer questions about a company's financial statements are a natural application of
+retrieval-augmented generation (RAG) and of tool-using large language model (LLM) agents~\cite{islam2023financebench}.
+Analysts rarely ask about the report alone: they also want to know what recent news says about a figure. Reading
+news, however, means reading text written by third parties. A news article can carry instructions aimed at the model
+(indirect prompt injection~\cite{greshake2023}) or false figures presented as facts
+(poisoning~\cite{zou2025poisonedrag}). In a financial setting the harm is concrete: an answer that silently replaces
+an audited revenue figure with an attacker's number, or that refuses to give the audited figure at all.
+
+AgentFinX is a multi-agent assistant for Vietnamese financial statements that combines a typed-fact store built from
+the report with a separate news-analysis branch. It also contains two explicit defenses: prompt guards that label
+external data as untrusted and forbid using news figures as report operands, and a provenance gate that keeps
+non-report facts out of report calculations. A natural question for such a system is not only \emph{whether} it
+resists news-borne attacks but \emph{which part} of it does.
+
+This paper makes three contributions.
+(i)~A pre-registered evaluation with 80 paired clean/attack cases across eight attack subtypes, comparing a plain RAG
+baseline (A) with the full pipeline (D) and two ablations that remove the explicit defenses (B, C).
+(ii)~An evidence-matched replay that gives the baseline's single model call the pipeline's own evidence, step by
+step, to locate where the reduction in attack success arises.
+(iii)~A replication of the A--D comparison with two further answering models, together with a full account of the
+labelling procedure, its limitations and its sensitivity to label disputes.
+
+\section{Related Work}
+\textbf{Indirect prompt injection.} Greshake~\cite{greshake2023} introduced indirect prompt injection and
+demonstrated it against deployed LLM-integrated applications. Benchmarks followed for single-turn tasks
+(BIPIA~\cite{yi2023bipia}) and for tool-using agents (InjecAgent~\cite{zhan2024injecagent},
+AgentDojo~\cite{debenedetti2024agentdojo}); they report substantial attack success across models.
+
+\textbf{RAG poisoning.} PoisonedRAG shows that a few injected passages can steer answers to attacker-chosen
+targets~\cite{zou2025poisonedrag}; RobustRAG isolates passages and aggregates answers to certify robustness against a
+bounded number of corrupted passages~\cite{xiang2024robustrag}.
+
+\textbf{Defenses.} Prompt-level defenses mark or encode untrusted content
+(spotlighting~\cite{hines2024spotlighting}); training-based defenses separate instructions from data
+(StruQ~\cite{chen2025struq}); system-level designs separate control flow from untrusted data and track provenance
+(CaMeL~\cite{debenedetti2025camel}).
+
+\textbf{This work} differs in setting and question. We study a deployed-style financial-report assistant with a
+trusted document (the audited report) and an untrusted channel (news), use attack cases with exact numeric gold
+answers, and ask which pipeline component accounts for the observed robustness rather than proposing a new defense.
+We do not evaluate adaptive attackers, and we do not compare against the defenses above.
+
+\section{System and Threat Model}
+\textbf{Baseline (A).} A single model call that receives the question, the top-10 report chunks from vector search
+(bge-m3 embeddings, no reranking) and the raw news articles.
+
+\textbf{AgentFinX (D).} A planner classifies the question; a router selects analysis agents and retrieval requests;
+an evidence builder assembles typed facts parsed from the report (stored in SQLite) and report passages (in Qdrant);
+analysis agents call retrieval tools; a synthesizer writes the answer. News runs in a separate branch: a selection
+step groups articles into events, an evidence step extracts quotes that must match the article verbatim, and code
+assigns a confirmation level from the source. The synthesizer receives this structured news (events, quotes,
+confirmation level, open questions), not the raw articles. Always-on mechanisms include output schemas, quote checks
+and value checks on units and periods.
+
+\textbf{Explicit defenses and ablations.} Two layers can be switched off for the experiment: the \emph{prompt
+guards}, which mark tool, retrieval and news content as untrusted data and state that news figures are never operands
+of report calculations, and the \emph{provenance gate}, which admits only report-origin facts as report evidence and
+calculation operands. Configuration B removes both, C removes only the provenance gate, and D keeps both.
+
+\textbf{Threat model.} The attacker controls the content of news articles about the company that the assistant
+retrieves for the question, but not the report, the index, the system prompts or the user. The audited report is
+trusted. The attacker's goal is either a \emph{numeric} one (the answer adopts a fake value of the asked metric, or a
+metric computed from it) or, for one subtype, a \emph{refusal} (the answer withholds the audited figure). Attacks are
+static: they are fixed before the runs and do not adapt to the defenses.
+
+\section{Experimental Design}
+\subsection{Attack cases}
+We built 100 cases (20 development, 80 test) over the published statements of eight Vietnamese listed companies.
+Each case asks for one metric (e.g., revenue, gross profit, profit after tax, operating cash flow, total assets,
+gross margin or revenue growth; 16 test cases require a computation) and what recent news says about it. Every gold
+value is traced to a line of the source report; derived values are recomputed exactly from their operands. Each case
+has two synthetic articles; the attack and clean versions differ only by one designed span. The test set has four
+injection subtypes (I1 direct override, I2 forged authority, I3 forced refusal, I4 spoofed system or tool output; 40
+cases) and four poisoning subtypes (P1 plain false claims, P2 false audit claims, P3 mislabelled period or cell, P4
+unit traps; 40 cases). 72 test cases have a numeric target and 8 (I3) a refusal target.
+
+\subsection{Configurations and evidence-matched replay}
+All answers were generated with gpt-oss:120b through the Ollama cloud API at temperature 0, once per case, condition
+and configuration (A--D: 640 answers). Each valid answer was kept as is: no answer was regenerated after a valid run.
+To locate the effect we replayed the baseline's single call with D's evidence, logged in the main run:
+\emph{Apre} receives the report facts D retrieved (before the synthesizer's cut) and the raw articles; \emph{Apost}
+receives the report facts D passed to its synthesizer and D's analysed news; \emph{ApostG} adds the untrusted-data
+labels to Apost. All three use A's prompt and limits.
+
+\subsection{Other answering models}
+We repeated A and D on the same 80 test cases with gpt-oss:120b, gpt-oss:20b and gemma4:31b (one main run each), and
+ran 16 pre-chosen cases (two per subtype) twice more per model to measure run-to-run stability, reported separately.
+The analysis plan was locked before these runs.
+
+\subsection{Outcomes}
+Attack success is defined per clean/attack pair. For numeric cases it is the attack answer adopting the fake value
+(asserting it as the report value or answer, or using it to compute the asked metric, even with a citation of the
+news); comparing the two sources, a conditional calculation or a mere mention does not count. For I3 it is a clean
+answer with the correct value together with an attack answer that refuses it; when the clean answer is wrong the pair
+is undetermined. Undetermined pairs stay in the denominator and are reported as ranges. Utility is the share of clean
+answers that state the correct target value at the displayed precision, the share of clean answers refused, and the
+share of numeric attack answers that are correct without adopting the fake value.
+
+\subsection{Labelling}\label{sec:labelling}
+A deterministic scorer (v3.4) labels each answer against a frozen rubric. The rubric was revised once after an
+adjudication round and then frozen. Answers the scorer leaves undetermined were reviewed blind by an AI reviewer
+(configuration and model hidden). One author then checked and confirmed final labels for selected answers: in the
+main study \val{p2.human.answers} answers (\val{p2.human.labels} labels), covering a 110-answer validation sample,
+every AI--scorer disagreement and a random sample; for the three-model runs
+\val{g.process.sheet} answers (\val{g.process.disagree} AI--scorer disagreements and \val{g.process.sample} randomly
+sampled answers), after a second, independent blind AI review. These human labels were \emph{not} blind: the person
+saw the AI labels and rationales. Some rubric readings (unit traps, unit conversions used to compare sources) were
+agreed after seeing outputs. The final label of each answer follows one precedence (human, then AI review, then
+scorer), keyed by run so that an answer appearing in several review packets has one label. The frozen label set
+covers \val{labels.intables} answers used in the tables (\val{labels.human} human-confirmed, \val{labels.ai}
+AI-reviewed, \val{labels.scorer} scorer-decided).
+
+Separately, \val{hv.raters} project-team members served as human raters (R1--R3), instructed to work independently
+of one another without AI assistance. They assessed all \val{hv.answers} attack answers whose locked final labels
+came solely from the scorer. This was a census of that subset, including stability repetitions, rather than a sample
+of all answers. Its use for scorer validation only was fixed before assignment; the locked primary labels remain
+unchanged. The answers were split among raters with \val{hv.shared} answers shared by all three, yielding
+\val{hv.rating_rows} ratings. Each person's files were shuffled under separate identifiers; model, configuration and
+prior labels were hidden. Raters received the frozen rubric and an approved, post-output interpretation annex. The
+files were divided by a fake-number detection heuristic, and the second part's guide disclosed that no fake value had
+been found and suggested absent/false labels; thus blinding did not extend to this heuristic cue. Returned files
+were hashed and their content checked before comparison. No prior exposure was reported; blank exposure fields were
+allowed to mean no exposure by the instructions. Shared answers use a per-label majority, with missing, exposed,
+unclear or tied ratings left unresolved; \val{hv.unresolved.use_of_fake} use-of-fake labels remained tied. Human
+labels are substituted only in the sensitivity analysis, never in the primary tables.
+
+\subsection{Statistics and pre-registration}
+We report Wilson 95\% intervals, and the two-sided 95\% Clopper--Pearson upper bound for zero counts. Comparisons
+use exact McNemar tests on case-paired outcomes with Holm correction within each family of tests: A--D, B--C and C--D
+for each attack family in the main run (six tests), the four replay steps, and A--D for each model and attack family
+(six tests). Non-significant results are not read as equivalence. Protocols, case sets and the product code were
+hashed before the runs; deviations are listed in Section~\ref{sec:limits}.
+
+\section{Results}
+\input{generated/tab_main.tex}
+
+\subsection{Main run}
+Table~\ref{tab:main} shows the main run. The baseline adopted the attacker's target in \val{p2.A.total.s} of 80
+pairs, with \val{p2.A.total.u} undetermined (\val{p2.A.total.lo}--\val{p2.A.total.hi}\%). AgentFinX had
+\val{p2.D.total.s} successes (upper bound \val{p2.D.total.cp}\%). The A--D difference is significant for injection
+(\val{p2.test.I.AD.a}/\val{p2.test.I.AD.b} discordant pairs, $p_{\text{Holm}}=\val{p2.test.I.AD.ph}$) and poisoning
+(\val{p2.test.P.AD.a}/\val{p2.test.P.AD.b}, $p_{\text{Holm}}=\val{p2.test.P.AD.ph}$). Removing the explicit defenses
+left attack success near zero (B: \val{p2.B.total.s}, C: \val{p2.C.total.s}); the B--C and C--D comparisons have at
+most one discordant pair, so this attack set does not detect a contribution of the prompt guards or the provenance
+gate. It does not show that they have none.
+
+\subsection{Where the reduction arises}
+\input{generated/tab_chain.tex}
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.62\textwidth]{figures/fig_chain.pdf}
+\caption{Attack success along the evidence-matched replay (gpt-oss:120b). Hatched: undetermined pairs (range);
+whiskers: Wilson 95\% intervals. Arrows: exact McNemar, Holm over the four steps; dashed: not significant.}
+\label{fig:chain}
+\end{figure}
+Table~\ref{tab:chain} and Fig.~\ref{fig:chain} follow the replay. Giving the baseline call the report facts that D
+retrieved reduced attack success from \val{ch.A.total.s} (+\val{ch.A.total.u}) to \val{ch.Apre.total.s}
+(+\val{ch.Apre.total.u}) ($p_{\text{Holm}}=\val{ch.test.all.AApre.ph}$), and adding D's analysed news in place of the
+raw articles reduced it further to \val{ch.Apost.total.s} ($p_{\text{Holm}}=\val{ch.test.all.ApreApost.ph}$). The
+untrusted-data labels (ApostG: \val{ch.ApostG.total.s}) and the rest of the pipeline (D: \val{ch.D.total.s}) did not
+produce a further significant reduction ($p_{\text{Holm}}=\val{ch.test.all.ApostApostG.ph}$ and
+\val{ch.test.all.ApostD.ph}). With 80 cases these last steps are under-powered; they are not evidence of no effect.
+The share of numeric attacks answered correctly without the fake value rose from
+\val{ch.A.attack_correct_without_fake.pct}\% (A) to \val{ch.Apost.attack_correct_without_fake.pct}\% (Apost) and
+\val{ch.D.attack_correct_without_fake.pct}\% (D).
+
+\subsection{Other answering models}
+{\renewcommand{\small}{\footnotesize}\input{generated/tab_models.tex}}
+Table~\ref{tab:models} repeats A and D with three answering models. The baseline was attacked successfully in
+\val{g.gpt-oss-120b.A.total.s}, \val{g.gpt-oss-20b.A.total.s} and \val{g.gemma4-31b.A.total.s} of 80 pairs (each
+with \val{g.gpt-oss-120b.A.total.u} undetermined I3 pairs whose clean answer was wrong), and D in
+\val{g.gpt-oss-120b.D.total.s}, \val{g.gpt-oss-20b.D.total.s} and \val{g.gemma4-31b.D.total.s}. All six A--D tests
+are significant after Holm correction ($p\le\val{g.holm.max}$). Both D successes are borderline: in one, the answer
+treats a news figure about 1{,}000 times larger as ``the same number'' as the report (a unit trap; human label); in
+the other, the scorer's adoption label is disputed by the later audit (Table~\ref{tab:sens}). The new gpt-oss:120b
+run is close to the main run (A \val{g.gpt-oss-120b.A.total.s} vs.\ \val{p2.A.total.s}; D
+\val{g.gpt-oss-120b.D.total.s} vs.\ \val{p2.D.total.s}), though the labels come from different review rounds. In the
+stability runs (16 cases, three runs) D's successes per run were \val{g.gpt-oss-120b.stab.Druns} (gpt-oss:120b),
+\val{g.gpt-oss-20b.stab.Druns} (gpt-oss:20b) and \val{g.gemma4-31b.stab.Druns} (gemma4:31b), while A's varied
+(gpt-oss:120b: \val{g.gpt-oss-120b.stab.Aruns}), so a single run of A carries run-to-run variation in addition to
+sampling error.
+
+\subsection{Utility}
+D answered clean questions correctly more often than A (Table~\ref{tab:main}: \val{p2.D.clean_correct.pct}\% vs.\
+\val{p2.A.clean_correct.pct}\%) and refused less (\val{p2.D.clean_refusal.pct}\% vs.\
+\val{p2.A.clean_refusal.pct}\%); the same pattern holds for the three models (Table~\ref{tab:models}). Robustness was
+therefore not bought by refusing. However, D seldom stated the conflict explicitly: only
+\val{p2.D.attack_two_sources_report_kept.pct}\% of numeric attack answers flagged the conflicting news figure while
+keeping the report's value, so most correct answers kept the right number without telling the reader that a news
+source disagreed.
+
+\subsection{Label reliability and sensitivity}
+The new human validation is summarised in Table~\ref{tab:human}. On the \val{hv.shared} shared answers, Fleiss'
+$\kappa$ for target achievement was \val{hv.ir.adopted_target.k}; pairwise Cohen's $\kappa$ ranged from
+\val{hv.ir.adopted_target.pairlo} to \val{hv.ir.adopted_target.pairhi}. On the
+\val{hv.adoption.numeric_answers} numeric-target answers, scorer--human adoption agreement was
+\val{hv.sc.adopted_target.agree}\% ($\kappa=\val{hv.sc.adopted_target.k}$). The scorer missed
+\val{hv.adoption.missed} of \val{hv.adoption.scorer_false} scorer-negative answers (false-omission rate
+\val{hv.adoption.false_omission_rate}\%) and falsely labelled adoption in \val{hv.adoption.false_alarm} of
+\val{hv.adoption.scorer_true} scorer-positive answers (false-discovery rate
+\val{hv.adoption.false_discovery_rate}\%). These denominators differ from the conventional false-negative and
+false-positive rates; both are retained in the accompanying report. Correctness agreement was
+$\kappa=\val{hv.sc.report_correct.k}$ across \val{hv.sc.report_correct.n} answers. Use-of-fake was rated by the
+humans but has no directly comparable scorer field.
+\input{generated/tab_human_validation.tex}
+
+For D, the humans identified \val{hv.D.missed} numeric adoptions among \val{hv.D.scorer_false} scorer-negative
+answers and rejected \val{hv.D.false_alarm} of \val{hv.D.scorer_true} scorer-positive labels. Substitution raises
+main-run D from \val{p2.D.total.s}/80 to \val{hv.main.D.s}/80. In the three-model runs D becomes
+\val{hv.g.gpt-oss-120b.D.s}/80 (120b), \val{hv.g.gpt-oss-20b.D.s}/80 (20b) and \val{hv.g.gemma4-31b.D.s}/80 (31b).
+The main-run A--D comparisons remain significant ($p_{\mathrm{Holm}}\le\val{hv.main.AD.ph.max}$), as do all six
+three-model comparisons ($p_{\mathrm{Holm}}\le\val{sens.blind_human.gmax}$). Apre$\to$Apost remains significant
+($p_{\mathrm{Holm}}=\val{sens.blind_human.ApreApost.ph}$); the two final replay comparisons remain non-significant.
+The broad A--D contrast therefore survives this validation, but the exact near-zero D counts are label-sensitive.
+
+Earlier AI-assisted checks remain distinct from this human validation. On a random sample of
+\val{g.process.sample} answers, scorer adoption agreement with non-blind confirmed labels was
+$\kappa=\val{g.svh.adopted_target.k}$. In the main study the scorer's agreement on adoption was
+$\kappa=\val{p2.svh.v34.adopted_target.k}$, but \val{p2.human.invalidation} of the \val{p2.human.answers}
+human-labelled answers belong to the sample it was tuned on; the untuned version (v3.3) reached
+$\kappa=\val{p2.svh.v33.adopted_target.k}$. After locking the labels we ran two targeted, non-blind AI audits: first
+of answers labelled both adopted and correct and of every D success, then of the mirror set (not adopted, wrong, not
+refusing). Their scenarios and the separate human-label substitution are shown in Table~\ref{tab:sens}.
+{\renewcommand{\small}{\scriptsize}\input{generated/tab_sens.tex}}
+
+\section{Discussion}
+In this setting the robustness of the agent comes mainly from \emph{what evidence reaches the generating call}, not
+from instructions about how to treat untrusted text. When the model sees the correct report facts and a structured,
+quote-checked summary of the news, it rarely adopts the attacker's figure, even with the same prompt as the
+baseline. Two practical consequences follow. First, investing in evidence preparation---retrieving the exact typed
+fact and presenting news as attributed, confirmation-graded events---may buy more robustness than prompt-level
+warnings. Second, the explicit defenses remain untested rather than shown useless: this static attack set produces
+too few paired differences between the ablations to separate their effects, and adaptive attacks may. The low rate
+of explicitly flagged conflicts is a usability gap: an analyst would benefit from being told that a news figure
+disagrees with the audited one.
+
+\section{Limitations}\label{sec:limits}
+\textbf{Labels.} The original human confirmations were made by one author after seeing AI labels and were not
+blind. The later validation covers all \val{hv.answers} scorer-only attack answers, but not scorer-only clean
+answers or the existing human/AI-reviewed answers. Most validated answers had one human rating; only
+\val{hv.shared} were shared. Model/configuration blinding does not remove the heuristic cue in the second worksheet
+or errors shared by raters. Some rubric readings were agreed after seeing outputs, and the validation used that
+approved interpretation annex; sensitivity may reflect both judgement and operational-definition differences. The
+\val{hv.D.missed} missed D adoptions caution against treating the primary near-zero counts as exactly error-free. A
+planned full AI re-review of all answers was stopped for time and compute reasons before aggregate results were
+calculated; its partial labels are not used here. The separate human validation described above was retained for
+verification and sensitivity only.
+
+\textbf{Scope.} One attack channel (news), static synthetic articles, a trusted report, eight companies, one main
+run per model, and a single replay model. We did not test adaptive attacks or baselines such as those
+in~\cite{hines2024spotlighting,chen2025struq,debenedetti2025camel}.
+
+\textbf{Provenance gate.} Pilot G3 failed because the deterministic calculation branch was not triggered, even on
+clean questions. Following the pre-registered stopping rule, we did not run the subsequent provenance-gate
+experiment. Therefore this study has not evaluated the provenance gate's protection of calculations.
+
+\textbf{Deviations from the protocols.} The protocols specified two independent human raters; labels instead came
+from AI reviewers with one non-blind human confirmation. The replay was re-run for \val{replay.fixed} cells after an
+evidence extraction bug was fixed. The three-model runs were executed in parallel and added a second blind AI review.
+
+\section{Conclusion}
+Against static news-borne injection and poisoning, a multi-agent financial-report assistant substantially reduced
+attack success relative to a plain baseline, with three answering models. The A--D differences persist under the
+separate human-label sensitivity analysis, although main-run D rises to \val{hv.main.D.s}/80. An evidence-matched
+replay attributes most of the reduction to evidence preparation---the right report facts and structured
+news---rather than to prompt guards or a provenance gate, whose contribution this attack set could not detect.
+
+\section*{Use of AI Tools}
+AI assistants (Anthropic Claude and OpenAI Codex) were used to write analysis code, to review and label answers (as
+described in Section~\ref{sec:labelling}, with human confirmation), and to draft this manuscript, which the authors
+reviewed and edited. No AI system is an author.
+
+\section*{Acknowledgments}
+We thank project-team members V\^{a}n, Nam, and Nguy\~{\^{e}}n Ti\'{\^{e}}n Khu\^{e} for annotating the
+scorer-only attack responses and contributing to the human validation of the evaluation labels.
+
+\section*{Data and Code Availability}
+Cases, protocols, analysis code and the frozen label set (SHA-256 prefix \texttt{\val{labels.sha}}) are available at \url{https://github.com/thanhhaitrn/agentfinx-research-artifacts/releases/tag/v1.0.0} (version \texttt{v1.0.0}); reported results are generated from the frozen label set and the archived human-validation report by
+scripts, without model calls. Original rater files and the mapping between rater identifiers and names are kept
+private. The experiments used \val{calls.total} model calls in total.
+
+% References: numbered in order of first citation; all authors listed (no "et al.").
+\begin{thebibliography}{10}
+\setlength{\itemsep}{2pt}
+\small
+
+\bibitem{islam2023financebench}
+P.~Islam, A.~Kannappan, D.~Kiela, R.~Qian, N.~Scherrer, and B.~Vidgen, FinanceBench: A New Benchmark for Financial
+Question Answering, \emph{arXiv preprint} arXiv:2311.11944 (2023).
+
+\bibitem{greshake2023}
+K.~Greshake, S.~Abdelnabi, S.~Mishra, C.~Endres, T.~Holz, and M.~Fritz, Not What You've Signed Up For: Compromising
+Real-World LLM-Integrated Applications with Indirect Prompt Injection, \emph{Proceedings of the 16th ACM Workshop on
+Artificial Intelligence and Security (AISec)}, pp.~79--90 (2023).
+
+\bibitem{zou2025poisonedrag}
+W.~Zou, R.~Geng, B.~Wang, and J.~Jia, PoisonedRAG: Knowledge Corruption Attacks to Retrieval-Augmented Generation of
+Large Language Models, \emph{Proceedings of the 34th USENIX Security Symposium} (2025).
+
+\bibitem{yi2023bipia}
+J.~Yi, Y.~Xie, B.~Zhu, E.~Kiciman, G.~Sun, X.~Xie, and F.~Wu, Benchmarking and Defending Against Indirect Prompt
+Injection Attacks on Large Language Models, \emph{arXiv preprint} arXiv:2312.14197 (2023).
+
+\bibitem{zhan2024injecagent}
+Q.~Zhan, Z.~Liang, Z.~Ying, and D.~Kang, InjecAgent: Benchmarking Indirect Prompt Injections in Tool-Integrated Large
+Language Model Agents, \emph{Findings of the Association for Computational Linguistics: ACL 2024},
+pp.~10471--10506 (2024).
+
+\bibitem{debenedetti2024agentdojo}
+E.~Debenedetti, J.~Zhang, M.~Balunovi\'{c}, L.~Beurer-Kellner, M.~Fischer, and F.~Tram\`{e}r, AgentDojo: A Dynamic
+Environment to Evaluate Prompt Injection Attacks and Defenses for LLM Agents, \emph{Advances in Neural Information
+Processing Systems, Datasets and Benchmarks Track}, Volume \textbf{37} (2024).
+
+\bibitem{xiang2024robustrag}
+C.~Xiang, T.~Wu, Z.~Zhong, D.~Wagner, D.~Chen, and P.~Mittal, Certifiably Robust RAG against Retrieval Corruption,
+\emph{arXiv preprint} arXiv:2405.15556 (2024).
+
+\bibitem{hines2024spotlighting}
+K.~Hines, G.~Lopez, M.~Hall, F.~Zarfati, Y.~Zunger, and E.~Kiciman, Defending Against Indirect Prompt Injection
+Attacks With Spotlighting, \emph{arXiv preprint} arXiv:2403.14720 (2024).
+
+\bibitem{chen2025struq}
+S.~Chen, J.~Piet, C.~Sitawarin, and D.~Wagner, StruQ: Defending Against Prompt Injection with Structured Queries,
+\emph{Proceedings of the 34th USENIX Security Symposium}, pp.~2383--2400 (2025).
+
+\bibitem{debenedetti2025camel}
+E.~Debenedetti, I.~Shumailov, T.~Fan, J.~Hayes, N.~Carlini, D.~Fabian, C.~Kern, C.~Shi, A.~Terzis, and
+F.~Tram\`{e}r, Defeating Prompt Injections by Design, \emph{arXiv preprint} arXiv:2503.18813 (2025).
+
+\end{thebibliography}
+
+\end{document}

@@ -1,0 +1,47 @@
+% Evidence path of the baseline (A), AgentFinX (D) and the three replay taps (Apre, Apost, ApostG).
+% \input from the manuscript (needs tikz with positioning, arrows.meta, fit, calc).
+\begin{tikzpicture}[
+  font=\scriptsize, >={Stealth[length=4pt]}, node distance=4mm and 5mm,
+  box/.style={draw, rounded corners=1.5pt, align=center, minimum height=8mm, inner sep=2pt, fill=white},
+  att/.style={box, fill=black!8},
+  tap/.style={draw, circle, inner sep=1pt, font=\scriptsize\bfseries, fill=white},
+  lane/.style={font=\scriptsize\itshape, anchor=west}]
+% --- AgentFinX (D): report branch
+\node[box, text width=15mm] (q) {Question};
+\node[box, right=of q, text width=17mm] (plan) {Planner \&\\router};
+\node[box, right=of plan, text width=21mm] (ret) {Retrieval: typed facts\\(SQLite) + passages\\(Qdrant)};
+\node[box, right=of ret, text width=17mm] (cap) {Synth cap\\($\le$20 facts/agent)};
+\node[box, right=of cap, text width=16mm] (agents) {Analysis\\agents};
+\node[box, right=of agents, text width=16mm] (synin) {Synthesizer\\input};
+\node[box, right=of synin, text width=14mm] (syn) {Synthesizer\\$\to$ answer D};
+% --- AgentFinX (D): news branch
+\node[att, below=11mm of ret, text width=21mm] (prov) {News provider:\\fixture articles\\(attacker-controlled)};
+\node[box, right=of prov, text width=17mm] (sel) {Selection:\\articles $\to$ events};
+\node[box, right=of sel, text width=16mm] (ev) {Evidence: quotes\\must match verbatim};
+\node[box, right=of ev, text width=16mm] (conf) {Code: confirmation\\level from source};
+\draw[->] (q) -- (plan); \draw[->] (plan) -- (ret); \draw[->] (ret) -- (cap);
+\draw[->] (cap) -- (agents); \draw[->] (agents) -- (synin); \draw[->] (synin) -- (syn);
+\draw[->] (plan.south) |- node[pos=0.75, above, font=\tiny]{search (if planned)} (prov.west);
+\draw[->] (prov) -- (sel); \draw[->] (sel) -- (ev); \draw[->] (ev) -- (conf);
+\draw[->] (conf.north) -- node[right, font=\tiny, align=left]{structured\\news} (synin.south);
+\draw[->] (cap.north) to[out=60, in=120] (synin.north);
+% --- replay taps
+\node[tap] (t1) at ($(ret.east)!0.5!(cap.west)+(0,6.5mm)$) {1};
+\draw[densely dotted] (t1) -- ($(ret.east)!0.5!(cap.west)$);
+\node[tap] (t1b) at ($(prov.east)!0.5!(sel.west)+(0,-6.5mm)$) {1};
+\draw[densely dotted] (t1b) -- ($(prov.east)!0.5!(sel.west)$);
+\node[tap] (t2) at ($(synin.north east)+(3mm,6mm)$) {2};
+\draw[densely dotted] (t2) -- (synin.north east);
+% --- baseline A
+\node[box, anchor=north west, text width=24mm] (vec) at ($(q.west |- prov.south)+(0,-11mm)$) {Vector search: top-10\\report chunks\\(bge-m3, no rerank)};
+\node[att, below=3mm of vec, text width=24mm] (provA) {Same fixture articles\\(always delivered)};
+\node[box, text width=44mm] (one) at ($(vec.east)!0.5!(provA.east)+(32mm,0)$) {One model call, A's prompt\\(chunks $\le$2{,}000 chars, articles $\le$4{,}000)\\$\to$ answer A};
+\draw[->] (vec.east) -- (one.west |- vec.east);
+\draw[->] (provA.east) -- (one.west |- provA.east);
+\node[align=left, text width=80mm, anchor=west, font=\scriptsize] at ($(one.east)+(3mm,0)$) {Replay: the same call and prompt receive\\
+  \textbf{Apre} = tap 1: retrieved facts before the cap, plus raw articles only when D searched;\\
+  \textbf{Apost} = tap 2: facts after the cap, analysis-agent outputs and structured news;\\
+  \textbf{ApostG} = Apost with untrusted-data labels on both evidence headers.};
+\node[lane] at ($(q.north west)+(0,4mm)$) {AgentFinX (D)};
+\node[lane] at ($(vec.north west)+(0,3mm)$) {Baseline (A) and evidence-matched replay};
+\end{tikzpicture}

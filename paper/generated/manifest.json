@@ -1,0 +1,15 @@
+{
+ "lock_sha256": "6bb4daeebd4387f617bf1d5a4281ae98064d3a680dc97aeb02b61913785f27a2",
+ "label_set_sha256": "bf1a72baf2bb2bc93cc62a1fd1ade96973c6fced8be95eaf42bd385f811a273e",
+ "human_validation_report_sha256": "5fffa622e12de19f4c42c6c9760b553dc193e21ea3aa17e5f2a81d08a54a28de",
+ "human_returned_manifest_sha256": "12b7c1ad67e920f0903cfbf0d3ef0254335b366e03cf97f3d5b45423334e1c54",
+ "numbers": 1409,
+ "files_sha256": {
+  "generated/numbers.tex": "cbb0493b58ac0b63e4188ebebb4531947f6c4aad83cc1cb7658f6b775325b00d",
+  "generated/tab_chain.tex": "23795c99c65d9b0d7f8f2334dc298ce5d112450b60fa1350902ca0fe0aebe594",
+  "generated/tab_human_validation.tex": "445a5f83b35bc4edc1c4863f66be5eccba31a465fe1995ce880729318f61a5a0",
+  "generated/tab_main.tex": "87e34d126b8cd83d8a5656708718c5ca71fe925f8e1f2ef817ce83dec62c7c21",
+  "generated/tab_models.tex": "069497ecc99dd9c23b7b453909509367a5c9c3845fae198fab9a9d2550369915",
+  "generated/tab_sens.tex": "04359a74b58de7aaf2b487ef49ee1b8d56e304459d0a41f55faf017f30e90410"
+ }
+}

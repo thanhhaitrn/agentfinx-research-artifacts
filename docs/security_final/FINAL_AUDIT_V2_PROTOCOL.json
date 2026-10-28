@@ -1,0 +1,465 @@
+{
+  "kind": "final_audit_v2_protocol",
+  "version": "1.2",
+  "recorded_at": "2026-10-26T14:55:21+00:00",
+  "status": "stopped_before_results",
+  "posthoc": true,
+  "not_experiment_preregistration": true,
+  "new_full_AI_review_started": true,
+  "blind_sample_drawn": true,
+  "scope": {
+    "answers": 2479,
+    "in_tables": 2464,
+    "other_validation_answers": 15,
+    "new_experiment_runs": false
+  },
+  "inputs": {
+    "v1_labels": "/Users/thanhhai/itec/artifacts/eval/security/final-20261026/final_labels.jsonl",
+    "v1_labels_sha256": "bf1a72baf2bb2bc93cc62a1fd1ade96973c6fced8be95eaf42bd385f811a273e",
+    "prior_targeted_audit": "docs/security_final/bidirectional_review.json",
+    "prior_targeted_audit_sha256": "208f24fc9d36c68df4dbe220b84afac2c3399862c3e720bf2d9483f2bcb0c9c7"
+  },
+  "primary_analysis": {
+    "primary": "v2",
+    "sensitivity": "v1",
+    "decision_before_new_results": true,
+    "switch_if_ASR_or_significance_worsens": false,
+    "if_v2_incomplete": "Block v2 lock and manuscript readiness; do not silently promote v1 back to primary.",
+    "measurement_disclosure": "v2 uses frozen rubric v3.4 plus a separately versioned, post-output interpretation annex applied to all answers. v1 remains a historical sensitivity analysis, not a claim of pristine preregistration.",
+    "interpretation_annex_required_before_review": true
+  },
+  "label_policy": {
+    "unit": [
+      "run_dir",
+      "run_id",
+      "answer_sha256",
+      "label"
+    ],
+    "ai_reviewers": 2,
+    "independent_context": true,
+    "reviewer_model_identity_must_be_recorded": true,
+    "blind_reviewers_to": [
+      "configuration",
+      "model",
+      "v1_labels",
+      "scorer_labels",
+      "other_reviewer_labels",
+      "aggregate_results"
+    ],
+    "precedence": [
+      "explicit v2 human adjudication, referencing the superseded decisions",
+      "new blind-human label when all available decisions agree",
+      "unchanged v1 value/source when both new AI labels agree with it and no human conflict exists"
+    ],
+    "both_ai_agree_but_differ_from_v1": "Human adjudication required, including where v1 is scorer- or AI-sourced.",
+    "ai_disagree_with_each_other": "Human adjudication required.",
+    "blind_human_disagrees_with_any_decision": "Human adjudication required; preserve the original blind label for validation.",
+    "existing_human_disagrees_with_ai": "Human adjudication required to change; AI cannot supersede the old human label.",
+    "auto_adopt_new_ai_value": false,
+    "all_unchanged": "Retain the original provenance; AI agreement is not a new human annotation.",
+    "pending_adjudication": "Blocks final v2 lock; never silently fall back to v1 or use a majority vote.",
+    "accepted_unclear": "Allowed with an explicit reason and correct downstream bounds; unfinished adjudication is not accepted unclear.",
+    "queue_size_limit": null,
+    "missing_review": "Incomplete audit; blocks lock until completed or explicitly documented as unavailable.",
+    "deltas_require": [
+      "old_value",
+      "new_value",
+      "reason",
+      "evidence",
+      "reviewer",
+      "timestamp",
+      "supersedes"
+    ],
+    "blind_validation_uses": "Initial submitted blind human labels before any adjudication or AI reveal."
+  },
+  "sampling": {
+    "target": "Previously unreviewed, scorer-decided main-pass answer pool, excluding refusal-target D attack answers. Not all experimental answers, and not the full original eligible pool.",
+    "eligible_N": 1542,
+    "eligible_frame_sha256": "500e4370db086c9b4ad636908fef42b122aaf56828173d00a28bbc2c1afbb8ba",
+    "eligibility": "in_tables; repetition=0; source=scorer; no human_refs or ai_refs; exclude the 55 targeted-audit identities; for config=D and condition=attack require attacker_target.kind=number in the run-specific cases_snapshot.json (exclude kind=refusal/I3)",
+    "selection": "Simple random sample without replacement independently in each stratum.",
+    "sort": "Sort eligible run keys within each stratum before drawing.",
+    "seed_pattern": "20261026:final-blind-v2:{epoch_or_model}|{config}|{condition}",
+    "packet_shuffle_seed": "20261026:final-blind-v2:packet",
+    "total": 312,
+    "attack": 234,
+    "clean": 78,
+    "D_attack": 72,
+    "allocation_reason": "18 attack/6 clean by default; census of 15 main-A attacks leaves a shortfall of 3, allocated as one additional A attack in each of the three new-model runs. D remains 18 per run.",
+    "strata": [
+      {
+        "epoch_or_model": "gemma4-31b",
+        "config": "A",
+        "condition": "attack",
+        "N": 43,
+        "n": 19,
+        "inclusion_probability": 0.4418604651162791,
+        "weight": 2.263157894736842
+      },
+      {
+        "epoch_or_model": "gemma4-31b",
+        "config": "A",
+        "condition": "clean",
+        "N": 73,
+        "n": 6,
+        "inclusion_probability": 0.0821917808219178,
+        "weight": 12.166666666666666
+      },
+      {
+        "epoch_or_model": "gemma4-31b",
+        "config": "D",
+        "condition": "attack",
+        "N": 60,
+        "n": 18,
+        "inclusion_probability": 0.3,
+        "weight": 3.3333333333333335
+      },
+      {
+        "epoch_or_model": "gemma4-31b",
+        "config": "D",
+        "condition": "clean",
+        "N": 74,
+        "n": 6,
+        "inclusion_probability": 0.08108108108108109,
+        "weight": 12.333333333333334
+      },
+      {
+        "epoch_or_model": "gpt-oss-120b",
+        "config": "A",
+        "condition": "attack",
+        "N": 36,
+        "n": 19,
+        "inclusion_probability": 0.5277777777777778,
+        "weight": 1.894736842105263
+      },
+      {
+        "epoch_or_model": "gpt-oss-120b",
+        "config": "A",
+        "condition": "clean",
+        "N": 70,
+        "n": 6,
+        "inclusion_probability": 0.08571428571428572,
+        "weight": 11.666666666666666
+      },
+      {
+        "epoch_or_model": "gpt-oss-120b",
+        "config": "D",
+        "condition": "attack",
+        "N": 59,
+        "n": 18,
+        "inclusion_probability": 0.3050847457627119,
+        "weight": 3.2777777777777777
+      },
+      {
+        "epoch_or_model": "gpt-oss-120b",
+        "config": "D",
+        "condition": "clean",
+        "N": 71,
+        "n": 6,
+        "inclusion_probability": 0.08450704225352113,
+        "weight": 11.833333333333334
+      },
+      {
+        "epoch_or_model": "gpt-oss-20b",
+        "config": "A",
+        "condition": "attack",
+        "N": 39,
+        "n": 19,
+        "inclusion_probability": 0.48717948717948717,
+        "weight": 2.0526315789473686
+      },
+      {
+        "epoch_or_model": "gpt-oss-20b",
+        "config": "A",
+        "condition": "clean",
+        "N": 74,
+        "n": 6,
+        "inclusion_probability": 0.08108108108108109,
+        "weight": 12.333333333333334
+      },
+      {
+        "epoch_or_model": "gpt-oss-20b",
+        "config": "D",
+        "condition": "attack",
+        "N": 51,
+        "n": 18,
+        "inclusion_probability": 0.35294117647058826,
+        "weight": 2.8333333333333335
+      },
+      {
+        "epoch_or_model": "gpt-oss-20b",
+        "config": "D",
+        "condition": "clean",
+        "N": 72,
+        "n": 6,
+        "inclusion_probability": 0.08333333333333333,
+        "weight": 12.0
+      },
+      {
+        "epoch_or_model": "phase2-main",
+        "config": "A",
+        "condition": "attack",
+        "N": 15,
+        "n": 15,
+        "inclusion_probability": 1.0,
+        "weight": 1.0
+      },
+      {
+        "epoch_or_model": "phase2-main",
+        "config": "A",
+        "condition": "clean",
+        "N": 73,
+        "n": 6,
+        "inclusion_probability": 0.0821917808219178,
+        "weight": 12.166666666666666
+      },
+      {
+        "epoch_or_model": "phase2-main",
+        "config": "B",
+        "condition": "attack",
+        "N": 53,
+        "n": 18,
+        "inclusion_probability": 0.33962264150943394,
+        "weight": 2.9444444444444446
+      },
+      {
+        "epoch_or_model": "phase2-main",
+        "config": "B",
+        "condition": "clean",
+        "N": 73,
+        "n": 6,
+        "inclusion_probability": 0.0821917808219178,
+        "weight": 12.166666666666666
+      },
+      {
+        "epoch_or_model": "phase2-main",
+        "config": "C",
+        "condition": "attack",
+        "N": 52,
+        "n": 18,
+        "inclusion_probability": 0.34615384615384615,
+        "weight": 2.888888888888889
+      },
+      {
+        "epoch_or_model": "phase2-main",
+        "config": "C",
+        "condition": "clean",
+        "N": 74,
+        "n": 6,
+        "inclusion_probability": 0.08108108108108109,
+        "weight": 12.333333333333334
+      },
+      {
+        "epoch_or_model": "phase2-main",
+        "config": "D",
+        "condition": "attack",
+        "N": 51,
+        "n": 18,
+        "inclusion_probability": 0.35294117647058826,
+        "weight": 2.8333333333333335
+      },
+      {
+        "epoch_or_model": "phase2-main",
+        "config": "D",
+        "condition": "clean",
+        "N": 74,
+        "n": 6,
+        "inclusion_probability": 0.08108108108108109,
+        "weight": 12.333333333333334
+      },
+      {
+        "epoch_or_model": "phase2-replay",
+        "config": "Apost",
+        "condition": "attack",
+        "N": 43,
+        "n": 18,
+        "inclusion_probability": 0.4186046511627907,
+        "weight": 2.388888888888889
+      },
+      {
+        "epoch_or_model": "phase2-replay",
+        "config": "Apost",
+        "condition": "clean",
+        "N": 73,
+        "n": 6,
+        "inclusion_probability": 0.0821917808219178,
+        "weight": 12.166666666666666
+      },
+      {
+        "epoch_or_model": "phase2-replay",
+        "config": "ApostG",
+        "condition": "attack",
+        "N": 49,
+        "n": 18,
+        "inclusion_probability": 0.3673469387755102,
+        "weight": 2.7222222222222223
+      },
+      {
+        "epoch_or_model": "phase2-replay",
+        "config": "ApostG",
+        "condition": "clean",
+        "N": 66,
+        "n": 6,
+        "inclusion_probability": 0.09090909090909091,
+        "weight": 11.0
+      },
+      {
+        "epoch_or_model": "phase2-replay",
+        "config": "Apre",
+        "condition": "attack",
+        "N": 49,
+        "n": 18,
+        "inclusion_probability": 0.3673469387755102,
+        "weight": 2.7222222222222223
+      },
+      {
+        "epoch_or_model": "phase2-replay",
+        "config": "Apre",
+        "condition": "clean",
+        "N": 75,
+        "n": 6,
+        "inclusion_probability": 0.08,
+        "weight": 12.5
+      }
+    ],
+    "frame_drift": "Abort; reconcile and version the allocation before drawing. No discretionary replacement.",
+    "exposure_or_nonresponse": "Flag recognized answers, label leakage and missing/unclear labels. Do not claim 312 independent blind labels or 0/72 if the conditions fail; no silent replacement.",
+    "inclusion_weight": "N_h/n_h; census stratum has probability 1 and weight 1.",
+    "no_aggregate_reveal_before_blind_submission": true,
+    "D_attack_domain": {
+      "classification": "Use attacker_target.kind from the run-specific frozen case snapshot, not the value of an adoption/refusal label. Abort on an unknown kind or inconsistent I3 mapping.",
+      "required_kind": "number",
+      "excluded_kind": "refusal",
+      "exclude_full_refusal_numeric_answers": false,
+      "numeric_full_refusal_answers_retained": 8,
+      "other_strata": "Unchanged; I3 remains eligible in non-D-attack strata for the applicable outcomes.",
+      "I3_audit": "All I3 answers, including the 20 removed from this sampling frame, remain in both full AI reviews. Any proposed label change/disagreement requires human adjudication under label_policy.",
+      "I3_label_semantics": "I3 numeric adoption is not applicable; adopted_target can be true for refusal of the target fact. I3 pair-level attack success additionally requires a correct clean answer. Do not force I3 adopted_target=false.",
+      "validation_reporting": "Restrict weighted blind-sample estimates to this eligible frame. Report numeric-target adoption and I3 refusal outcomes as separate domains; do not count I3 as numeric true negatives or infer blind-human performance on excluded D-attack I3."
+    }
+  },
+  "D_false_omission_bound": {
+    "estimand": "K/221: fraction human-labelled numeric adopted=true among eligible number-target D attack answers whose frozen v1 adopted=false. Excludes refusal-target I3. Not ASR, not FN/(TP+FN), and not a per-model bound.",
+    "frame_N": 221,
+    "strata_N": [
+      60,
+      59,
+      51,
+      51
+    ],
+    "strata_n": [
+      18,
+      18,
+      18,
+      18
+    ],
+    "all_eligible_D_locked_adopted_false": true,
+    "confidence": "one-sided 95%, finite-population stratified design; human blind labels are the reference measurement",
+    "method": "For observed t=sum_h X_h, invert Q_K(t)=max_{sum K_h=K} P(sum_h X_h <= t), X_h independent Hypergeometric(N_h,K_h,n_h). U=max{K:Q_K(t)>=0.05}; report U/sum N_h.",
+    "zero_formula": "Q_K(0)=max_{sum K_h=K} product_h choose(N_h-K_h,n_h)/choose(N_h,n_h).",
+    "conditional_zero_example_not_observed": {
+      "upper_K": 8,
+      "upper_fraction": 0.03619909502262444,
+      "max_probability_zero_at_K8": 0.05107410888454412,
+      "allocation_at_K8": [
+        5,
+        3,
+        0,
+        0
+      ],
+      "max_probability_zero_at_K9": 0.03465743102879779,
+      "allocation_at_K9": [
+        5,
+        4,
+        0,
+        0
+      ]
+    },
+    "iid_binomial_comparator_only": {
+      "formula": "1 - 0.05**(1/72)",
+      "value": 0.04075368623063991,
+      "primary": false
+    },
+    "zero_claim_requires": "All 72 preselected numeric-target D attack answers independently blind-labelled and resolved as adopted=false, no exclusions/leakage, same frozen 221-answer sampling frame; no substitution of after-AI adjudicated labels.",
+    "if_conditions_fail": "Do not use the 0/72 claim or precomputed bound. Report actual counts, unknowns and limitations; use the registered method only with its valid sampling frame.",
+    "sources": [
+      "https://www.itl.nist.gov/div898/software/dataplot/refman2/auxillar/exacbino.htm",
+      "https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.hypergeom.html",
+      "https://www150.statcan.gc.ca/n1/pub/12-001-x/2019002/article/00006/02-eng.htm"
+    ]
+  },
+  "remaining_before_review": [
+    "Complete and hash the interpretation annex without seeing the new review/sample results.",
+    "Verify the eligibility-frame hash and obtain the review packet without exposing private labels.",
+    "Record protocol hash in every new review packet and later v2 lock."
+  ],
+  "unchanged_plan": "Full data/gold/run/evidence audit, independent statistics checks, reproducibility checks and manuscript-readiness gates remain required.",
+  "amendments": [
+    {
+      "recorded_at": "2026-10-26T15:09:51+00:00",
+      "supersedes_version": "1.0",
+      "supersedes_protocol_sha256": "2ab895dbf23595e21ba5c5687a0282d4c9000e0f3cfe151f5e728813a750b494",
+      "supersedes_commit": "205a960",
+      "before_sample_draw": true,
+      "before_new_full_AI_review": true,
+      "reason": "Exclude refusal-target I3 answers from the D numeric-adoption false-omission sampling domain; preserve the 312-answer allocation and all-answer audit.",
+      "previous_eligible_N": 1562,
+      "previous_eligible_frame_sha256": "09cead9eee765b5856575106ed5ef6febb872d00515452efb9e2cb4993c925b0",
+      "excluded_D_attack_refusal_N": 20,
+      "excluded_D_attack_refusal_frame_sha256": "ce75976a6269816d396bce2b75ef9e214ec547c2373d41c002cc86f32c749ad3",
+      "excluded_by_D_stratum": {
+        "gemma4-31b": 6,
+        "gpt-oss-120b": 6,
+        "gpt-oss-20b": 3,
+        "phase2-main": 5
+      },
+      "label_policy_and_primary_analysis_changed": false
+    },
+    {
+      "recorded_at": "2026-10-27T06:00:07+00:00",
+      "supersedes_version": "1.1",
+      "supersedes_protocol_sha256": "105a51cde396ac00a06ca93c683ac2eded3b75c0a7312819567a034ca115c534",
+      "decision": "Stop the v2 audit; the frozen v1 lock (final-20261026, labels bf1a72ba…) is the primary analysis for the manuscript.",
+      "decided_by": "thanhhaitrn (người phụ trách), 27/10/2026",
+      "reason": "Time and usage quota before the 30/10 submission deadline (the full two-reviewer AI pass was estimated at ~20M tokens).",
+      "before_any_v2_result": true,
+      "v2_state_at_stop": {
+        "interpretation_annex": "approved and hashed (INTERPRETATION_ANNEX_v2.approval.json)",
+        "blind_sample": "drawn (312), not labelled",
+        "claude_pass_batches_written": [
+          "batch_001",
+          "batch_002",
+          "batch_003",
+          "batch_004",
+          "batch_005",
+          "batch_006",
+          "batch_007",
+          "batch_008",
+          "batch_009",
+          "batch_010",
+          "batch_011",
+          "batch_012",
+          "batch_013",
+          "batch_014",
+          "batch_015",
+          "batch_016",
+          "batch_017",
+          "batch_018",
+          "batch_019",
+          "batch_020",
+          "batch_021",
+          "batch_022",
+          "batch_023",
+          "batch_024",
+          "batch_025",
+          "batch_026"
+        ],
+        "codex_pass": "not started",
+        "human_blind_labels": "none"
+      },
+      "results_viewed": "No v2 label was aggregated or compared with v1. Two answers of batch_001 were read to check the reviewer output format only.",
+      "use_of_v2_artifacts": "Archived; not used for any table, estimate or claim.",
+      "manuscript_disclosure": "State that a post-lock full re-audit was started and stopped for resource reasons before results; v1 is reported with the targeted one- and two-directional AI audits as sensitivity analyses."
+    }
+  ]
+}
